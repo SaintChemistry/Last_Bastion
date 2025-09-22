@@ -21,7 +21,7 @@ Built in Godot 4.5
 ### Cloning
 
 ```bash
-git clone https://github.com/Saint_Chemistry/rampart-remix.git
+git clone https://github.com/Saint_Chemistry/Last_Bastion.git
 cd rampart-remix
 ```
 
