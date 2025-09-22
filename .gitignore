@@ -1,3 +1,36 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+.import/
+.export/
+
+# Exported builds
+export/
+bin/
+*.exe 
+*.apk
+*.pck
+*.zip
+*.tar.gz
+
+# OS-generated
+.DS-store
+Thumbs.db
+desktop.ini
+
+# IDE/editor stuff
+.vscode/
+.idea/
+*.suo
+*.user
+*.useroscache
+*.sln.docstates
+
+# Logs
+*.log 
+
+# Python/other tooling (just in case)
+__pycache__/
+*.pyc 
+*.pyo 
+*.pyd
