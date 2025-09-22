@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-# Rampart: Remix
+# Last Bastion: Siege
 
 A community open-source project inspired by the classic Rampart (1990).
 Built in Godot 4.5
