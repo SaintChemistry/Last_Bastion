@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=4 uid="uid://dajncc80b3rm6"]
 
 [ext_resource type="PackedScene" uid="uid://dfxxpjg5pewr6" path="res://scenes/Cannon.tscn" id="2_0xm2m"]
-[ext_resource type="Texture2D" uid="uid://c2856hif7jq5j" path="res://assets/Placeholders/wall.png" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://c2856hif7jq5j" path="res://assets/wall.png" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://vjfip2rjmto" path="res://scripts/camera_2d.gd" id="3_1bvp3"]
 [ext_resource type="Script" uid="uid://chrwhvusr55dm" path="res://scripts/selector.gd" id="3_h2yge"]
-[ext_resource type="Texture2D" uid="uid://dan1guf1cv266" path="res://assets/Placeholders/selector.png" id="4_lquwl"]
-[ext_resource type="Script" uid="uid://daihyeqoqk3r3" path="res://game_manager.gd" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://dan1guf1cv266" path="res://assets/selector.png" id="4_lquwl"]
+[ext_resource type="Script" uid="uid://dsklt3cgqcu" path="res://scripts/game_manager.gd" id="6_7mycd"]
 [ext_resource type="AudioStream" uid="uid://0jt15cqswbwf" path="res://sounds/beep-07a.wav" id="7_272bh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
@@ -38,10 +38,11 @@ drag_vertical_enabled = true
 script = ExtResource("3_1bvp3")
 target = NodePath("../selector")
 
-[node name="selector" type="Sprite2D" parent="." node_paths=PackedStringArray("walls_layer")]
+[node name="selector" type="Sprite2D" parent="." node_paths=PackedStringArray("walls_layer", "game_manager")]
 texture = ExtResource("4_lquwl")
 script = ExtResource("3_h2yge")
 walls_layer = NodePath("../Grid/walls")
+game_manager = NodePath("../GameManager")
 
 [node name="GameManager" type="Node" parent="."]
 editor_description = "Controls game logic

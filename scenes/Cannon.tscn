@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dfxxpjg5pewr6"]
 
 [ext_resource type="Script" uid="uid://nd34hc73b1p" path="res://scenes/cannon.gd" id="1_3pe62"]
-[ext_resource type="Texture2D" uid="uid://dtev5k0ibuas5" path="res://assets/Placeholders/cannon.png" id="1_dgm0w"]
+[ext_resource type="Texture2D" uid="uid://dtev5k0ibuas5" path="res://assets/cannon.png" id="1_dgm0w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3pe62"]
 size = Vector2(64, 64)

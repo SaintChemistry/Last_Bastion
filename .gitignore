@@ -3,6 +3,9 @@
 /android/
 .import/
 .export/
+*.import
+*.tmp
+*.uid
 
 # Exported builds
 export/
