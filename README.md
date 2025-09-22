@@ -12,7 +12,7 @@ Built in Godot 4.5
 - All code is released under the **MIT License**
 - No assets, code or binaries from the original work are used.
 - This is an original, fan-made project inspired by classic siege defense games. It is not affiliated with (in any way) or endorsed by Atari Games. 
-- The original Rampart is owned by its respective rights holders.
+- The original "Rampart", the inspiration for this creation, is owned by its respective rights holders.
 
 ### Getting Started
 
