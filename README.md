@@ -1,6 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 # Last Bastion
 
 A community open-source project inspired by the classic Rampart (1990).
@@ -11,7 +10,7 @@ Built in Godot 4.5
 - This project is **non-commercial** and provided for **educational and preservational intents**. No copyright infringement is implied or considered.
 - All code is released under the **MIT License**
 - No assets, code or binaries from the original work are used.
-- This is an original, fan-made project inspired by classic siege defense games. It is not affiliated with (in any way) or endorsed by Atari Games. 
+- This is an original, fan-made project inspired by classic siege defense games. It is not affiliated with (in any way) or endorsed by Atari Games.
 - The original "Rampart", the inspiration for this creation, is owned by its respective rights holders.
 
 ### Getting Started
@@ -21,8 +20,8 @@ Built in Godot 4.5
 ### Cloning
 
 ```bash
-git clone https://github.com/Saint_Chemistry/rampart-remix.git
-cd rampart-remix
+git clone https://github.com/Saint_Chemistry/Last_Bastion.git
+cd Last_Bastion
 ```
 
 ### Opening in Godot
