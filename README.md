@@ -24,7 +24,7 @@ cd rampart-remix
 ### Opening in Godot
 
 1. Launch Godot
-2. In the Project Manager, click ##Import
+2. In the Project Manager, click ## Import
 3. Browse to this folder and select `project.godot`
 4. Godot will regenerate its local `.godot/` cache and the project will appear normally.
 
