@@ -3,7 +3,7 @@
 # Last Bastion
 
 A community open-source project inspired by the classic Rampart (1990).
-Built in Godot 4.5
+Built in Godot 4.5, programmed in VSCode with C#.
 
 ## Legal Disclaimer
 
