@@ -1,10 +1,13 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Vector2 = Godot.Vector2;
+using Vector2i = Godot.Vector2I;
 
 public partial class Selector : Node2D
 {
-    [Export] public TileMap WallsLayer;
+    [Export] public TileMapLayer WallsLayer;
     [Export] public Node GameManagerNode;
 
     private GameManager.Phase _currentPhase;
@@ -78,46 +81,57 @@ public partial class Selector : Node2D
 
     private void UpdateAsTetrominoBuilder()
     {
-        var mouseGlobal = GetGlobalMousePosition();
-        var mouseLocal = WallsLayer.ToLocal(mouseGlobal);
-        var gridOrigin = WallsLayer.LocalToMap(mouseLocal);
+        // mouse positions are floats (Vector2)
+        Vector2 mouseGlobal = GetGlobalMousePosition();
+        Vector2 mouseLocal = WallsLayer.ToLocal(mouseGlobal);
+
+        // grid origin is ints (Vector2I)
+        Vector2I gridOrigin = WallsLayer.LocalToMap(mouseLocal);
 
         var absCells = new List<Vector2I>();
         bool canPlace = true;
 
         foreach (var offset in _currentPiece)
         {
-            var cell = gridOrigin + offset;
+            Vector2I cell = gridOrigin + offset;
             absCells.Add(cell);
-            if (WallsLayer.GetCellSourceId(0, cell) != -1) // occupied
+
+            // TileMapLayer API → just takes Vector2I now
+            if (WallsLayer.GetCellSourceId(cell) != -1)
                 canPlace = false;
         }
 
         _previewCells = absCells;
-        _previewColor = canPlace ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
+        _previewColor = canPlace
+            ? new Color(0, 1, 0, 0.5f)
+            : new Color(1, 0, 0, 0.5f);
+
         QueueRedraw();
 
         if (Input.IsActionJustPressed("mouse_left") && canPlace)
         {
             foreach (var cell in absCells)
-                WallsLayer.SetCell(0, cell, 0, new Vector2I(0, 0));
+            {
+                // new SetCell signature: (Vector2I coords, int sourceId, Vector2I? atlasCoords = null, int alternativeTile = 0)
+                WallsLayer.SetCell(cell, 0, new Vector2I(0, 0));
+            }
             NewPiece();
         }
     }
 
     public override void _Draw()
     {
-        var tileSize = WallsLayer.TileSet.TileSize;
+        var tileSize = WallsLayer.TileSet.TileSize; // Vector2I
 
         if (_currentPhase == GameManager.Phase.BUILD || _currentPhase == GameManager.Phase.REPAIR)
         {
             if (_previewCells.Count > 0)
             {
-                var cellHalf = tileSize / 2;
+                var cellHalf = (Vector2)tileSize / 2f; // cast to Vector2 for drawing
                 foreach (var cell in _previewCells)
                 {
-                    var cellCenter = WallsLayer.MapToLocal(cell);
-                    DrawRect(new Rect2(cellCenter - cellHalf, tileSize), _previewColor, true);
+                    var cellCenter = (Vector2)WallsLayer.MapToLocal(cell);
+                    DrawRect(new Rect2(cellCenter - cellHalf, (Vector2)tileSize), _previewColor, true);
                 }
             }
         }
@@ -125,8 +139,10 @@ public partial class Selector : Node2D
         {
             int size = 16;
             var color = new Color(1, 1, 1, 0.8f);
-            DrawLine(new Vector2(-size, 0), new Vector2(size, 0), color, 2.0f);
-            DrawLine(new Vector2(0, -size), new Vector2(0, size), color, 2.0f);
+
+            // Force Godot.Vector2 to avoid conflict
+            DrawLine(new Godot.Vector2(-size, 0), new Godot.Vector2(size, 0), color, 2.0f);
+            DrawLine(new Godot.Vector2(0, -size), new Godot.Vector2(0, size), color, 2.0f);
         }
     }
 
@@ -140,10 +156,14 @@ public partial class Selector : Node2D
 
     private void UpdateAsCrosshair()
     {
+        // GlobalPosition is a Godot.Vector2
         GlobalPosition = GetGlobalMousePosition();
+
         QueueRedraw();
 
         if (Input.IsActionJustPressed("mouse_left"))
+        {
             GD.Print($"Firing cannons at {GlobalPosition}");
+        }
     }
 }

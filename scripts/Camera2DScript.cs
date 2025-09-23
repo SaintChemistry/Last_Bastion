@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Camera2SCript : Camera2D
+public partial class Camera2DScript : Camera2D
 {
     [Export] public Node2D Target;
 

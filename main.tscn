@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://ccmkb14aginbt" path="res://scenes/Cannon.tscn" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://cnfxd7ai7g16f" path="res://assets/wall.png" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://cxsrdcwfng6rh" path="res://scripts/Camera2D.cs" id="3_272bh"]
-[ext_resource type="Script" uid="uid://b0avo8c6j8flf" path="res://Selector.cs" id="4_272bh"]
+[ext_resource type="Script" uid="uid://cxsrdcwfng6rh" path="res://scripts/Camera2DScript.cs" id="3_272bh"]
+[ext_resource type="Script" uid="uid://bv2qk2f1788c3" path="res://scripts/Selector.cs" id="4_272bh"]
 [ext_resource type="Script" uid="uid://b3dltnntlt5ko" path="res://scripts/GameManager.cs" id="6_5vw27"]
 [ext_resource type="AudioStream" uid="uid://ce8giugmv2qew" path="res://sounds/beep-07a.wav" id="7_272bh"]
 [ext_resource type="Script" uid="uid://dts7n1548yykt" path="res://scripts/TestExports.cs" id="8_5vw27"]
@@ -37,8 +37,9 @@ drag_horizontal_enabled = true
 drag_vertical_enabled = true
 script = ExtResource("3_272bh")
 
-[node name="selector" type="Node2D" parent="."]
+[node name="selector" type="Node2D" parent="." node_paths=PackedStringArray("GameManagerNode")]
 script = ExtResource("4_272bh")
+GameManagerNode = NodePath("../GameManager")
 
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("PhaseTimer", "PhaseLabel", "BeepPlayer")]
 editor_description = "Controls game logic
