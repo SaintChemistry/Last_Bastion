@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ccmkb14aginbt"]
 
-[ext_resource type="Script" uid="uid://nd34hc73b1p" path="res://scenes/cannon.gd" id="1_3pe62"]
+[ext_resource type="Script" uid="uid://djak826ptjy2r" path="res://scripts/Cannon.cs" id="1_3pe62"]
 [ext_resource type="Texture2D" uid="uid://dtev5k0ibuas5" path="res://assets/cannon.png" id="1_dgm0w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3pe62"]

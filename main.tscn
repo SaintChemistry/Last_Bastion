@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=4 uid="uid://b0eic66j5y6a0"]
+[gd_scene load_steps=11 format=4 uid="uid://b0eic66j5y6a0"]
 
 [ext_resource type="PackedScene" uid="uid://ccmkb14aginbt" path="res://scenes/Cannon.tscn" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://c2856hif7jq5j" path="res://assets/wall.png" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://vjfip2rjmto" path="res://scripts/camera_2d.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://cjo6t8oyogmyq" path="res://scripts/Camera2D.cs" id="3_272bh"]
 [ext_resource type="Script" uid="uid://b0avo8c6j8flf" path="res://Selector.cs" id="4_272bh"]
-[ext_resource type="Script" uid="uid://dsklt3cgqcu" path="res://scripts/game_manager.gd" id="6_7mycd"]
-[ext_resource type="Script" uid="uid://dodiilxr8ek06" path="res://mouse_tracker.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://buf2lta6skuyo" path="res://scripts/GameManager.cs" id="6_5vw27"]
+[ext_resource type="Script" path="res://mouse_tracker.gd" id="7_5vw27"]
 [ext_resource type="AudioStream" uid="uid://co2iwa8wth2xd" path="res://sounds/beep-07a.wav" id="7_272bh"]
+[ext_resource type="Script" uid="uid://ce7w7wu8j0bjr" path="res://scripts/TestExports.cs" id="8_5vw27"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
 texture = ExtResource("2_h2yge")
@@ -35,16 +36,18 @@ position_smoothing_enabled = true
 position_smoothing_speed = 2.5
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-script = ExtResource("3_1bvp3")
-target = NodePath("../MouseTracker")
+script = ExtResource("3_272bh")
 
 [node name="selector" type="Node2D" parent="."]
 script = ExtResource("4_272bh")
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("PhaseTimer", "PhaseLabel", "BeepPlayer")]
 editor_description = "Controls game logic
 "
-script = ExtResource("6_7mycd")
+script = ExtResource("6_5vw27")
+PhaseTimer = NodePath("PhaseTimer")
+PhaseLabel = NodePath("CanvasLayer/PhaseLabel")
+BeepPlayer = NodePath("BeepPlayer")
 
 [node name="PhaseTimer" type="Timer" parent="GameManager"]
 editor_description = "The timer between different phases (i.e. Build, Repair, Battle)"
@@ -68,5 +71,8 @@ scroll_speed = 600.0
 edge_size = 100
 smooth_factor = 6.0
 use_edge_scroll = true
+
+[node name="TestNode" type="Node2D" parent="."]
+script = ExtResource("8_5vw27")
 
 [connection signal="timeout" from="GameManager/PhaseTimer" to="GameManager" method="_on_phase_timer_timeout"]

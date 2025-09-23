@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "dotnet.defaultSolution": "Last Bastion.sln",
+    "godotTools.editorPath.godot4": "c:\\Users\\John-PC\\Downloads\\Godot_v4.5-stable_mono_win64\\Godot_v4.5-stable_mono_win64\\Godot_v4.5-stable_mono_win64.exe"
+  }
+}
