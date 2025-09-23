@@ -1,9 +1,10 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+
+// Aliases to avoid System.Numerics conflicts
 using Vector2 = Godot.Vector2;
-using Vector2i = Godot.Vector2I;
+using Vector2I = Godot.Vector2I;
 
 public partial class Selector : Node2D
 {
@@ -31,6 +32,11 @@ public partial class Selector : Node2D
         {
             gm.PhaseChanged += OnPhaseChanged;
             _currentPhase = gm.CurrentPhase;
+        }
+
+        if (WallsLayer == null)
+        {
+            GD.PrintErr("Selector: WallsLayer not assigned in Inspector!");
         }
     }
 
@@ -75,17 +81,16 @@ public partial class Selector : Node2D
 
     private void NewPiece()
     {
-        var shape = TetrominoShapes[GD.Randi() % TetrominoShapes.Length];
+        var shape = TetrominoShapes[(int)(GD.Randi() % (uint)TetrominoShapes.Length)];
         _currentPiece = new List<Vector2I>(shape);
     }
 
     private void UpdateAsTetrominoBuilder()
     {
-        // mouse positions are floats (Vector2)
+        if (WallsLayer == null) return;
+
         Vector2 mouseGlobal = GetGlobalMousePosition();
         Vector2 mouseLocal = WallsLayer.ToLocal(mouseGlobal);
-
-        // grid origin is ints (Vector2I)
         Vector2I gridOrigin = WallsLayer.LocalToMap(mouseLocal);
 
         var absCells = new List<Vector2I>();
@@ -96,8 +101,7 @@ public partial class Selector : Node2D
             Vector2I cell = gridOrigin + offset;
             absCells.Add(cell);
 
-            // TileMapLayer API → just takes Vector2I now
-            if (WallsLayer.GetCellSourceId(cell) != -1)
+            if (WallsLayer.GetCellSourceId(cell) != -1) // occupied
                 canPlace = false;
         }
 
@@ -112,25 +116,51 @@ public partial class Selector : Node2D
         {
             foreach (var cell in absCells)
             {
-                // new SetCell signature: (Vector2I coords, int sourceId, Vector2I? atlasCoords = null, int alternativeTile = 0)
                 WallsLayer.SetCell(cell, 0, new Vector2I(0, 0));
             }
             NewPiece();
         }
     }
 
+    private void UpdateAsCannonBuilder()
+    {
+        if (WallsLayer == null) return;
+
+        _previewCells.Clear();
+        QueueRedraw();
+
+        if (Input.IsActionJustPressed("mouse_left"))
+        {
+            // TODO: Rampart rule check → only allow 2x2 inside sealed walls
+            GD.Print("Placing cannon (stub)");
+        }
+    }
+
+    private void UpdateAsCrosshair()
+    {
+        GlobalPosition = GetGlobalMousePosition();
+        QueueRedraw();
+
+        if (Input.IsActionJustPressed("mouse_left"))
+        {
+            GD.Print($"Firing cannons at {GlobalPosition}");
+        }
+    }
+
     public override void _Draw()
     {
-        var tileSize = WallsLayer.TileSet.TileSize; // Vector2I
+        if (WallsLayer == null) return;
+
+        Vector2I tileSize = WallsLayer.TileSet.TileSize;
 
         if (_currentPhase == GameManager.Phase.BUILD || _currentPhase == GameManager.Phase.REPAIR)
         {
             if (_previewCells.Count > 0)
             {
-                var cellHalf = (Vector2)tileSize / 2f; // cast to Vector2 for drawing
-                foreach (var cell in _previewCells)
+                Vector2 cellHalf = (Vector2)tileSize / 2f;
+                foreach (Vector2I cell in _previewCells)
                 {
-                    var cellCenter = (Vector2)WallsLayer.MapToLocal(cell);
+                    Vector2 cellCenter = (Vector2)WallsLayer.MapToLocal(cell);
                     DrawRect(new Rect2(cellCenter - cellHalf, (Vector2)tileSize), _previewColor, true);
                 }
             }
@@ -139,31 +169,8 @@ public partial class Selector : Node2D
         {
             int size = 16;
             var color = new Color(1, 1, 1, 0.8f);
-
-            // Force Godot.Vector2 to avoid conflict
-            DrawLine(new Godot.Vector2(-size, 0), new Godot.Vector2(size, 0), color, 2.0f);
-            DrawLine(new Godot.Vector2(0, -size), new Godot.Vector2(0, size), color, 2.0f);
-        }
-    }
-
-    private void UpdateAsCannonBuilder()
-    {
-        _previewCells.Clear();
-        QueueRedraw();
-        if (Input.IsActionJustPressed("mouse_left"))
-            GD.Print("Placing cannon (stub)");
-    }
-
-    private void UpdateAsCrosshair()
-    {
-        // GlobalPosition is a Godot.Vector2
-        GlobalPosition = GetGlobalMousePosition();
-
-        QueueRedraw();
-
-        if (Input.IsActionJustPressed("mouse_left"))
-        {
-            GD.Print($"Firing cannons at {GlobalPosition}");
+            DrawLine(new Vector2(-size, 0), new Vector2(size, 0), color, 2.0f);
+            DrawLine(new Vector2(0, -size), new Vector2(0, size), color, 2.0f);
         }
     }
 }

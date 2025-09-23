@@ -12,10 +12,6 @@ public partial class GameManager : Node
     [Export] public Label PhaseLabel;
     [Export] public AudioStreamPlayer BeepPlayer;
 
-    // Debug Export test
-    [Export] public int DebugValue = 123;
-
-
     public Phase CurrentPhase = Phase.BUILD;
     private float _remainingTime = 0.0f;
     private int _lastTimeLeft = -1;
@@ -23,6 +19,11 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
+        if (PhaseTimer != null)
+        {
+            PhaseTimer.Timeout += _OnPhaseTimerTimeout;
+        }
+
         StartPhase(Phase.BUILD, 20f);
     }
 
