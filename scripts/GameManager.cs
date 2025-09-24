@@ -19,12 +19,6 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
-        // Debug Start
-        GD.Print($"PhaseLabel node path: {PhaseLabel.GetPath()}");
-        GD.Print($"PhaseLabel visible: {PhaseLabel.Visible}");
-        GD.Print($"PhaseLabel position: {PhaseLabel.Position}");
-        // Debug End
-
         if (PhaseTimer != null)
         {
             PhaseTimer.Timeout += _OnPhaseTimerTimeout;
