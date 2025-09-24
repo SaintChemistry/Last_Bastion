@@ -1,25 +1,29 @@
 using Godot;
+using System;
 
-public partial class Projectile : Node2D
+public partial class Projectile : Area2D
 {
-    [Export] public float Speed = 300f;
-    public Vector2 Velocity { get; set; } = Vector2.Zero;
+    [Export] public int Damage = 25;
+    [Export] public float Speed = 400f;
+
+    public Vector2 Velocity;
 
     public override void _Process(double delta)
     {
-        Position += Velocity * (float)delta;
+        GlobalPosition += Velocity * (float)delta;
 
-        // Auto-delete when leaving the screen
+        // Remove if outside viewport bounds
         if (!GetViewportRect().HasPoint(GlobalPosition))
             QueueFree();
     }
 
-    private void _OnArea2DBodyEntered(Node body)
+    private void _OnBodyEntered(Node body)
     {
-        // TODO: Apply damage/effects here
-        // Debug Start
-        GD.Print($"Projectile hit: {body.Name} (groups: {string.Join(",", body.GetGroups())})");
-        QueueFree();
+        if (body is Cannon cannon)
+        {
+            cannon.TakeDamage(Damage);
+            QueueFree();
+        }
     }
 
 }
