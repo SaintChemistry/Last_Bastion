@@ -233,6 +233,14 @@ public partial class Selector : Node2D
         if (Input.IsActionJustPressed("mouse_left"))
         {
             GD.Print($"Firing cannons at {GlobalPosition}");
+
+            foreach (Node child in CannonsParent.GetChildren())
+            {
+                if (child is Cannon cannon)
+                {
+                    cannon.Fire(GlobalPosition);
+                }
+            }
         }
     }
     public override void _Draw()

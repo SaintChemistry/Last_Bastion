@@ -14,12 +14,12 @@ public partial class Cannon : Node2D
         if (ProjectileScene == null)
             return;
 
-        var projectile = ProjectileScene.Instantiate<Node2D>();
+        var projectile = ProjectileScene.Instantiate<Projectile>();
         GetParent().AddChild(projectile);
         projectile.GlobalPosition = GlobalPosition;
 
         // If your projectile has a velocity or direction method, set it here
         var dir = (targetpPosition - GlobalPosition).Normalized();
-        projectile.Set("velocity", dir * 300f);
+        projectile.Velocity = dir * 300f;
     }
 }
