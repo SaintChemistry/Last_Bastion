@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://b0eic66j5y6a0"]
+[gd_scene load_steps=11 format=4 uid="uid://b0eic66j5y6a0"]
 
 [ext_resource type="PackedScene" uid="uid://ccmkb14aginbt" path="res://scenes/Cannon.tscn" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://cnfxd7ai7g16f" path="res://assets/wall.png" id="2_h2yge"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b3dltnntlt5ko" path="res://scripts/GameManager.cs" id="6_5vw27"]
 [ext_resource type="AudioStream" uid="uid://ce8giugmv2qew" path="res://sounds/beep-07a.wav" id="7_272bh"]
 [ext_resource type="Script" uid="uid://dts7n1548yykt" path="res://scripts/TestExports.cs" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://ck8vtwbvtbbb2" path="res://WindowManager.cs" id="8_kek77"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
 texture = ExtResource("2_h2yge")
@@ -39,10 +40,12 @@ script = ExtResource("3_272bh")
 MarginPercent = 0.15000000000000002
 CameraSpeed = 600.0
 
-[node name="selector" type="Node2D" parent="." node_paths=PackedStringArray("WallsLayer", "GameManagerNode")]
+[node name="selector" type="Node2D" parent="." node_paths=PackedStringArray("WallsLayer", "GameManagerNode", "CannonsLayer")]
 script = ExtResource("4_272bh")
 WallsLayer = NodePath("../Grid/walls")
 GameManagerNode = NodePath("../GameManager")
+CannonScene = ExtResource("2_0xm2m")
+CannonsLayer = NodePath("../Grid/cannons")
 
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("PhaseTimer", "PhaseLabel", "BeepPlayer")]
 editor_description = "Controls game logic
@@ -72,5 +75,8 @@ stream = ExtResource("7_272bh")
 
 [node name="TestNode" type="Node2D" parent="."]
 script = ExtResource("8_5vw27")
+
+[node name="WindowManager" type="Node" parent="."]
+script = ExtResource("8_kek77")
 
 [connection signal="timeout" from="GameManager/PhaseTimer" to="GameManager" method="_on_phase_timer_timeout"]

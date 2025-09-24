@@ -104,23 +104,28 @@ public partial class GameManager : Node
 
     private void _OnPhaseTimerTimeout()
     {
+
         switch (CurrentPhase)
         {
             case Phase.BUILD:
                 GD.Print("Switching to CANNONS phase");
                 StartPhase(Phase.CANNONS, 10f);
+                GD.PushWarning($"DEBUG: Switching Phases -> {CurrentPhase}");
                 break;
             case Phase.CANNONS:
                 GD.Print("Switching to BATTLE phase");
+                GD.PushWarning($"DEBUG: Switching Phases -> {CurrentPhase}");
                 StartPhase(Phase.BATTLE, 0f);
                 break;
             case Phase.BATTLE:
                 GD.Print("Switching to REPAIR phase");
+                GD.PushWarning($"DEBUG: Switching Phases -> {CurrentPhase}");
                 StartPhase(Phase.REPAIR, 20f);
                 break;
             case Phase.REPAIR:
                 _difficulty += 0.05f;
                 GD.Print($"Repair finished → increasing difficulty to {_difficulty:F2}");
+                GD.PushWarning($"DEBUG: Switching Phases -> {CurrentPhase}");
                 StartPhase(Phase.BUILD, 20f);
                 break;
         }

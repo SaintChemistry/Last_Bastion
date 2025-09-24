@@ -5,6 +5,10 @@ public partial class Cannon : Node2D
 {
     [Export] public PackedScene ProjectileScene;
 
+    public override void _Ready()
+    {
+        AddToGroup("cannon");
+    }
     public void Fire(Vector2 targetpPosition)
     {
         if (ProjectileScene == null)
