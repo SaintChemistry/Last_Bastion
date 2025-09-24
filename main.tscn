@@ -28,7 +28,7 @@ tile_set = SubResource("TileSet_lquwl")
 
 [node name="cannons" type="TileMapLayer" parent="Grid"]
 
-[node name="cannon" parent="Grid/cannons" groups=["cannons"] instance=ExtResource("2_0xm2m")]
+[node name="CannonsParent" type="Node2D" parent="Grid/cannons"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_smoothed = true
@@ -40,12 +40,13 @@ script = ExtResource("3_272bh")
 MarginPercent = 0.15000000000000002
 CameraSpeed = 600.0
 
-[node name="selector" type="Node2D" parent="." node_paths=PackedStringArray("WallsLayer", "GameManagerNode", "CannonsLayer")]
+[node name="selector" type="Node2D" parent="." node_paths=PackedStringArray("WallsLayer", "GameManagerNode", "CannonsLayer", "CannonsParent")]
 script = ExtResource("4_272bh")
 WallsLayer = NodePath("../Grid/walls")
 GameManagerNode = NodePath("../GameManager")
 CannonScene = ExtResource("2_0xm2m")
 CannonsLayer = NodePath("../Grid/cannons")
+CannonsParent = NodePath("../Grid/cannons/CannonsParent")
 
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("PhaseTimer", "PhaseLabel", "BeepPlayer")]
 editor_description = "Controls game logic
@@ -65,8 +66,10 @@ one_shot = true
 [node name="PhaseLabel" type="Label" parent="GameManager/CanvasLayer"]
 editor_description = "Displays which phase the player is currently in on the HUD.
 "
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -45.0
+offset_top = -38.0
+offset_right = 41.0
+offset_bottom = 39.0
 
 [node name="BeepPlayer" type="AudioStreamPlayer" parent="GameManager"]
 stream = ExtResource("7_272bh")

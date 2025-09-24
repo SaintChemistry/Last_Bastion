@@ -14,7 +14,8 @@ public partial class Selector : Node2D
     [Export] public TileMapLayer WallsLayer;
     [Export] public Node GameManagerNode;
     [Export] public PackedScene CannonScene;
-    [Export] public Node2D CannonsLayer;
+    [Export] public TileMapLayer CannonsLayer;
+    [Export] public Node2D CannonsParent;
 
     private GameManager.Phase _currentPhase;
     private List<Vector2I> _currentPiece = new();
@@ -131,17 +132,14 @@ public partial class Selector : Node2D
     {
         var spaceState = GetWorld2D().DirectSpaceState;
 
-        // Find footprint center
+        // Center of footprint (average of 4 cells)
         Vector2 worldPos = Vector2.Zero;
         foreach (var cell in cannonCells)
             worldPos += WallsLayer.MapToLocal(cell);
         worldPos /= cannonCells.Count;
 
-        // Footprint size (2x2 tiles)
-        Vector2I tileSize = WallsLayer.TileSet.TileSize;
-        Vector2 footprintSize = (Vector2)tileSize * 2;
-
-        // Create rectangle query
+        // Cannon footprint size = 64×64 (2×2 tiles @ 32px each)
+        Vector2 footprintSize = new Vector2(64, 64);
         var rectShape = new RectangleShape2D { Size = footprintSize };
 
         var query = new PhysicsShapeQueryParameters2D
@@ -152,20 +150,23 @@ public partial class Selector : Node2D
             CollideWithBodies = true
         };
 
-        // Query physics space
         var results = spaceState.IntersectShape(query, 8);
+        GD.Print($"DEBUG Overlap: {results.Count} hits at {worldPos}");
 
         foreach (var hit in results)
         {
             var collider = hit["collider"];
-            if (collider.Obj is Node node && node.IsInGroup("cannon"))
+            if (collider.Obj is Node node)
             {
-                return true; // overlap detected
+                GD.Print($"  Hit {node.Name} groups: {string.Join(",", node.GetGroups())}");
+                if (node.IsInGroup("cannon"))
+                    return true;
             }
         }
 
         return false;
     }
+
     private void UpdateAsCannonBuilder()
     {
         if (WallsLayer == null || CannonScene == null || CannonsLayer == null)
@@ -175,7 +176,7 @@ public partial class Selector : Node2D
         Vector2 mouseLocal = WallsLayer.ToLocal(mouseGlobal);
         Vector2I gridOrigin = WallsLayer.LocalToMap(mouseLocal);
 
-        // Define a 2x2 area
+        // 2×2 cannon footprint (since cannon = 64×64, tiles = 32×32)
         var cannonCells = new List<Vector2I>
         {
             gridOrigin,
@@ -186,31 +187,31 @@ public partial class Selector : Node2D
 
         bool canPlace = true;
 
-        // 1. Check walls
+        // Check walls + cannon grid
         foreach (var cell in cannonCells)
         {
-            if (WallsLayer.GetCellSourceId(cell) != -1)
+            if (WallsLayer.GetCellSourceId(cell) != -1 || CannonsLayer.GetCellSourceId(cell) != -1)
             {
                 canPlace = false;
                 break;
             }
         }
 
-        // 2. Check cannons (full footprint)
-        if (canPlace && IsCannonOverlap(cannonCells))
-        {
-            canPlace = false;
-        }
-
-        // 3. Update preview
+        // Preview color
         _previewCells = cannonCells;
         _previewColor = canPlace ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
         QueueRedraw();
 
-        // 4. Place cannon if valid
+        // Place if valid
         if (Input.IsActionJustPressed("mouse_left") && canPlace)
         {
-            // Center of footprint
+            // Mark cannons on the grid layer
+            foreach (var cell in _previewCells)
+            {
+                CannonsLayer.SetCell(cell, 0, new Vector2I(0, 0)); // tile index 0
+            }
+
+            // Place actual Cannon scene at the center
             Vector2 worldPos = Vector2.Zero;
             foreach (var cell in _previewCells)
                 worldPos += WallsLayer.MapToLocal(cell);
@@ -218,7 +219,8 @@ public partial class Selector : Node2D
 
             var cannon = CannonScene.Instantiate<Cannon>();
             cannon.Position = worldPos;
-            CannonsLayer.AddChild(cannon);
+            // Add to the Node2D inside cannons (not the TileMap)
+            CannonsParent.AddChild(cannon);
 
             GD.Print($"Placed cannon at {worldPos}");
         }
@@ -248,6 +250,23 @@ public partial class Selector : Node2D
                 {
                     Vector2 cellCenter = (Vector2)WallsLayer.MapToLocal(cell);
                     DrawRect(new Rect2(cellCenter - cellHalf, (Vector2)tileSize), _previewColor, true);
+                }
+            }
+            else if (_currentPhase == GameManager.Phase.CANNONS)
+            {
+                if (_previewCells.Count > 0)
+                {
+                    // Get average center of footprint
+                    Vector2 worldPos = Vector2.Zero;
+                    foreach (var cell in _previewCells)
+                        worldPos += WallsLayer.MapToLocal(cell);
+                    worldPos /= _previewCells.Count;
+
+                    // Cannon footprint = 64×64
+                    Vector2 footprintSize = new Vector2(64, 64);
+                    Vector2 halfSize = footprintSize / 2f;
+
+                    DrawRect(new Rect2(worldPos - halfSize, footprintSize), _previewColor, true);
                 }
             }
         }
