@@ -66,10 +66,10 @@ one_shot = true
 [node name="PhaseLabel" type="Label" parent="GameManager/CanvasLayer"]
 editor_description = "Displays which phase the player is currently in on the HUD.
 "
-offset_left = -45.0
-offset_top = -38.0
-offset_right = 41.0
-offset_bottom = 39.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 96.0
+offset_bottom = 82.0
 
 [node name="BeepPlayer" type="AudioStreamPlayer" parent="GameManager"]
 stream = ExtResource("7_272bh")
