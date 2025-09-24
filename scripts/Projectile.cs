@@ -17,6 +17,8 @@ public partial class Projectile : Node2D
     private void _OnArea2DBodyEntered(Node body)
     {
         // TODO: Apply damage/effects here
+        // Debug Start
+        GD.Print($"Projectile hit: {body.Name} (groups: {string.Join(",", body.GetGroups())})");
         QueueFree();
     }
 

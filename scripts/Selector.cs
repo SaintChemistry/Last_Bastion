@@ -49,7 +49,6 @@ public partial class Selector : Node2D
     private void OnPhaseChanged(int newPhase, float difficulty)
     {
         _currentPhase = (GameManager.Phase)newPhase;
-        GD.Print($"DEBUG: Selector received phase change -> {_currentPhase}");
 
         switch (_currentPhase)
         {
@@ -151,14 +150,12 @@ public partial class Selector : Node2D
         };
 
         var results = spaceState.IntersectShape(query, 8);
-        GD.Print($"DEBUG Overlap: {results.Count} hits at {worldPos}");
 
         foreach (var hit in results)
         {
             var collider = hit["collider"];
             if (collider.Obj is Node node)
             {
-                GD.Print($"  Hit {node.Name} groups: {string.Join(",", node.GetGroups())}");
                 if (node.IsInGroup("cannon"))
                     return true;
             }

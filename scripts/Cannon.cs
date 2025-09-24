@@ -9,17 +9,21 @@ public partial class Cannon : Node2D
     {
         AddToGroup("cannon");
     }
-    public void Fire(Vector2 targetpPosition)
+    public void Fire(Vector2 targetPosition)
     {
         if (ProjectileScene == null)
+        {
+            GD.PushWarning("ProjectileScene not assigned!");
             return;
+        }
 
         var projectile = ProjectileScene.Instantiate<Projectile>();
         GetParent().AddChild(projectile);
         projectile.GlobalPosition = GlobalPosition;
 
-        // If your projectile has a velocity or direction method, set it here
-        var dir = (targetpPosition - GlobalPosition).Normalized();
+        var dir = (targetPosition - GlobalPosition).Normalized();
         projectile.Velocity = dir * 300f;
+
+        GD.Print($"Projectile fired from {GlobalPosition} toward {targetPosition}");
     }
 }
