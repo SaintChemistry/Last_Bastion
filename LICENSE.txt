@@ -4,6 +4,7 @@ Copyright (c) 2025 John Jennings
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (henceforth, the 'Software'), to deal in the Software without restriction, including without limitation the right to use, copy, modify, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: 
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. 
+- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. 
+- The Creator assumes no responsibility for consequences directly caused by the improper use of provided Software, by a user, direct or otherwise. 
 
-THE SOFTWARE IS PROVIDED "AS-IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. THE CREATOR ASSUMES NO RESPONSIBILITY FOR IMPROPER USE OF THE SOFTWARE NOT ACCORDING TO INSTRUCTION. 
+THE SOFTWARE IS PROVIDED "AS-IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
