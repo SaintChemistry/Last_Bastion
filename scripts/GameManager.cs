@@ -12,6 +12,9 @@ public partial class GameManager : Node
     [Export] public Label PhaseLabel;
     [Export] public AudioStreamPlayer BeepPlayer;
 
+    // === NEW: Playfield bounds ===
+    public static Rect2 PlayfieldBounds { get; private set; } = new Rect2(-1000, -1000, 2000, 2000);
+
     public Phase CurrentPhase = Phase.BUILD;
     private float _remainingTime = 0.0f;
     private int _lastTimeLeft = -1;
@@ -24,9 +27,39 @@ public partial class GameManager : Node
             PhaseTimer.Timeout += _OnPhaseTimerTimeout;
         }
 
+        // Calculate playfield once at start (use "Walls" TileMapLayer)
+        var wallsLayer = GetTree().Root.GetNodeOrNull<TileMapLayer>("Main/Walls");
+        if (wallsLayer != null)
+        {
+            PlayfieldBounds = CalculateTilemapBounds(wallsLayer);
+            GD.Print($"[GameManager] Playfield bounds initialized = {PlayfieldBounds}");
+        }
+
         StartPhase(Phase.BUILD, 20f);
     }
 
+    // === NEW: helper to recalc when regenerating terrain ===
+    public void UpdatePlayfieldBounds(TileMapLayer layer)
+    {
+        PlayfieldBounds = CalculateTilemapBounds(layer);
+        GD.Print($"[GameManager] Playfield bounds updated = {PlayfieldBounds}");
+    }
+
+    private Rect2 CalculateTilemapBounds(TileMapLayer layer)
+    {
+        Rect2I used = layer.GetUsedRect();
+
+        Vector2 worldTopLeft = layer.MapToLocal(used.Position);
+        Vector2 worldBottomRight = layer.MapToLocal(used.End);
+
+        Vector2 worldSize = worldBottomRight - worldTopLeft;
+        Vector2 half = worldSize / 2f;
+
+        // Center bounds on (0,0)
+        return new Rect2(-half, worldSize);
+    }
+
+    // === Existing phase code unchanged ===
     private void StartPhase(Phase phase, float duration)
     {
         CurrentPhase = phase;
@@ -104,7 +137,6 @@ public partial class GameManager : Node
 
     private void _OnPhaseTimerTimeout()
     {
-
         switch (CurrentPhase)
         {
             case Phase.BUILD:
